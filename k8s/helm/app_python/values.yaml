@@ -52,7 +52,7 @@ resources:
     cpu: "250m"
   limits:
     memory: "128Mi"
-    cpu: "500m"  
+    cpu: "500m"
 
 autoscaling:
   enabled: false
@@ -64,13 +64,18 @@ volumes:
    - name: config-volume
      configMap:
        name: app-python-config-map
+   - name: init-data
+     emptyDir:
+       sizeLimit: 10Mi
 
 volumeMounts:
   - name: config-volume
     mountPath: /app/configs/config.json
     subPath: config.json
   - name: app-data
-      mountPath: /myapp/resources
+    mountPath: /myapp/resources
+  - name: init-data
+    mountPath: /app/init
 
 volumeClaimTemplates:
   - metadata:
@@ -80,7 +85,7 @@ volumeClaimTemplates:
       resources:
         requests:
           storage: 62Mi
-          
+
 nodeSelector: {}
 
 tolerations: []
